@@ -21,7 +21,8 @@ export class AdminPanel implements OnInit {
     author: 'Lady Whistledown',
     publicarInstagram: false,
     socialSummary: '',
-    linkGenerado: ''
+    linkGenerado: '',
+    imageUrl: ''
   };
 
   // Arreglo para listar todas las noticias en el dashboard
@@ -29,9 +30,20 @@ export class AdminPanel implements OnInit {
   
   // Lista de autores cargados desde la base de datos
   listaAutores: any[] = [];
+  autores: any[] = [];
 
   // Archivo de imagen seleccionado
   imagenSeleccionada: File | null = null;
+
+  // Variables para la generación con IA
+  temaIA: string = '';
+  contextoAutorIA: string = '';
+  generandoIA: boolean = false;
+
+  // Variables para Unsplash
+  queryUnsplash: string = '';
+  imagenesUnsplash: any[] = [];
+  buscandoImagenes: boolean = false;
 
   // Inyectamos el HttpClient y ChangeDetectorRef
   constructor(private http: HttpClient, private cdr: ChangeDetectorRef) { }
@@ -41,11 +53,77 @@ export class AdminPanel implements OnInit {
     this.cargarAutores();
   }
 
+  generarConIA() {
+    if (!this.temaIA || !this.contextoAutorIA) {
+      alert('Por favor, ingresa el tema y la personalidad del autor.');
+      return;
+    }
+
+    this.generandoIA = true;
+    this.cdr.detectChanges();
+
+    this.http.post('http://localhost:3000/posts/generar', { 
+      tema: this.temaIA, 
+      contextoAutor: this.contextoAutorIA 
+    }).subscribe({
+      next: (res: any) => {
+        console.log('🕵️♂️ RESPUESTA PURA DE LA IA:', res); // Lupa activada
+        
+        this.historia.title = res.title;
+        this.historia.content = res.content;
+        this.historia.socialSummary = res.socialSummary;
+        
+        // Asignamos la palabra clave en inglés al buscador
+        this.queryUnsplash = res.imageKeyword || 'error de IA'; 
+        this.buscarImagenesUnsplash();
+        
+        // Ejecutar generación del link si existe el método
+        this.generarLink();
+        
+        this.generandoIA = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error al generar:', err);
+        this.generandoIA = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  buscarImagenesUnsplash() {
+    this.buscandoImagenes = true;
+    this.cdr.detectChanges();
+
+    const q = this.queryUnsplash || this.historia.title || this.temaIA || 'revista';
+    
+    this.http.get<any[]>(`http://localhost:3000/posts/imagenes/buscar?q=${encodeURIComponent(q)}&page=1`).subscribe({
+      next: (res) => {
+        this.imagenesUnsplash = res;
+        this.buscandoImagenes = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error al buscar imágenes en Unsplash:', err);
+        this.imagenesUnsplash = [];
+        this.buscandoImagenes = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  seleccionarImagen(url: string) {
+    this.historia.imageUrl = url;
+    this.imagenesUnsplash = [];
+    this.cdr.detectChanges();
+  }
+
   // Carga todos los autores desde el backend
   cargarAutores() {
     this.http.get<any[]>('http://localhost:3000/authors').subscribe({
       next: (data) => {
         this.listaAutores = data;
+        this.autores = data;
         if (data && data.length > 0 && !this.historia.id) {
           // Si estamos creando y el autor está vacío o es el por defecto,
           // inicializamos con el primero disponible
@@ -102,6 +180,10 @@ export class AdminPanel implements OnInit {
       formData.append('file', this.imagenSeleccionada);
     }
 
+    if (this.historia.imageUrl) {
+      formData.append('imageUrl', this.historia.imageUrl);
+    }
+
     const esEdicion = !!this.historia.id;
     const url = esEdicion 
       ? `http://localhost:3000/posts/${this.historia.id}` 
@@ -143,7 +225,8 @@ export class AdminPanel implements OnInit {
       author: noticia.author || 'Lady Whistledown',
       publicarInstagram: false,
       socialSummary: noticia.socialSummary || '',
-      linkGenerado: ''
+      linkGenerado: '',
+      imageUrl: noticia.imageUrl || ''
     };
     this.generarLink();
     this.imagenSeleccionada = null;
@@ -182,7 +265,8 @@ export class AdminPanel implements OnInit {
       author: 'Lady Whistledown',
       publicarInstagram: false,
       socialSummary: '',
-      linkGenerado: ''
+      linkGenerado: '',
+      imageUrl: ''
     };
     this.imagenSeleccionada = null;
 

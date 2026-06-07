@@ -1,14 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 .articulo-markdown p { margin-bottom: 1.5rem; line-height: 1.8; color: #334155; }
+.dark .articulo-markdown p { color: #f1f5f9; }
 .articulo-markdown strong { font-weight: 700; color: #0f172a; }
+.dark .articulo-markdown strong { color: #f8fafc; }
 .articulo-markdown blockquote { 
   border-left: 4px solid #065f46; /* Verde esmeralda oscuro */
   padding-left: 1rem; 
   font-style: italic; 
   color: #475569; 
   margin: 2rem 0; 
-  background-color: #f8fafc;
+  background-color: #fdfbf7;
   padding: 1rem;
+}
+.dark .articulo-markdown blockquote {
+  border-left-color: #b09eec;
+  color: #cbd5e1;
+  background-color: #231f38;
 }

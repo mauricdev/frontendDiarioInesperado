@@ -10,6 +10,59 @@
         </div>
 
         <div class="p-8">
+            <!-- 🪄 Generador Mágico de Crónicas -->
+            <div class="mb-8 p-6 bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl border border-indigo-100 shadow-sm relative overflow-hidden">
+                <!-- Elementos decorativos -->
+                <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-200/40 rounded-full blur-2xl"></div>
+                <div class="absolute -left-10 -bottom-10 w-32 h-32 bg-blue-200/30 rounded-full blur-2xl"></div>
+
+                <div class="relative flex items-center gap-2 mb-4">
+                    <span class="text-xl">🪄</span>
+                    <h3 class="text-md font-bold text-indigo-950 tracking-wide">Generador Mágico de Crónicas</h3>
+                </div>
+
+                <div class="relative space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-indigo-900 uppercase tracking-wider mb-1.5">Tema a investigar</label>
+                        <input type="text"
+                            [(ngModel)]="temaIA"
+                            name="temaIA"
+                            class="w-full px-4 py-2.5 text-sm border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all bg-white"
+                            placeholder="Ej. Descubrimiento de una pizzería secreta que atiende solo a gatos...">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-indigo-900 uppercase tracking-wider mb-1.5">Contexto / Personalidad del Autor</label>
+                        <select [(ngModel)]="contextoAutorIA"
+                            name="contextoAutorIA"
+                            class="w-full px-4 py-2.5 text-sm border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all bg-white text-slate-700 cursor-pointer">
+                            <option value="" disabled selected>Selecciona un personaje...</option>
+                            @for (autor of autores; track autor.id) {
+                                <option [value]="autor.bio">{{ autor.name }}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="flex justify-end pt-2">
+                        <button type="button"
+                            (click)="generarConIA()"
+                            [disabled]="generandoIA"
+                            class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 disabled:from-indigo-400 disabled:to-blue-400 text-white font-semibold text-sm rounded-lg shadow-md hover:shadow-indigo-200/50 transition-all duration-200 cursor-pointer disabled:cursor-not-allowed">
+                            @if (generandoIA) {
+                                <!-- Spinner svg -->
+                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span>Escribiendo crónica...</span>
+                            } @else {
+                                <span>✨ Investigar y Redactar</span>
+                            }
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <form class="space-y-6">
 
                 <div>
@@ -45,10 +98,76 @@
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-800 mb-2">Foto de la historia (Imagen)</label>
-                    <input type="file"
-                        (change)="onFileSelected($event)"
-                        accept="image/*"
-                        class="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-800 hover:file:bg-emerald-100 cursor-pointer">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Subida de archivo tradicional -->
+                        <div class="p-5 border border-dashed border-slate-300 rounded-xl bg-slate-50 hover:bg-slate-100/50 transition-colors flex flex-col justify-center">
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Subir desde dispositivo</span>
+                            <input type="file"
+                                (change)="onFileSelected($event)"
+                                accept="image/*"
+                                class="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-800 hover:file:bg-emerald-100 cursor-pointer">
+                            @if (historia.imageUrl) {
+                                <div class="mt-4 p-2 bg-emerald-50 rounded-lg border border-emerald-150 flex items-center justify-between">
+                                    <span class="text-xs text-emerald-800 font-medium truncate max-w-[200px]">Imagen seleccionada de Unsplash</span>
+                                    <button type="button" (click)="historia.imageUrl = ''" class="text-xs text-rose-600 hover:text-rose-800 font-semibold cursor-pointer">Quitar</button>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Buscador Unsplash -->
+                        <div class="p-5 border border-slate-200 rounded-xl bg-white shadow-sm flex flex-col justify-between">
+                            <div>
+                                <span class="text-xs font-semibold text-indigo-900 uppercase tracking-wider block mb-2">📸 Buscar Portada Profesional</span>
+                                <div class="flex gap-2">
+                                    <input type="text"
+                                        [(ngModel)]="queryUnsplash"
+                                        name="queryUnsplash"
+                                        class="flex-1 px-3 py-2 text-sm border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all bg-white"
+                                        placeholder="Ej: Gatos comiendo pizza">
+                                    <button type="button"
+                                        (click)="buscarImagenesUnsplash()"
+                                        [disabled]="buscandoImagenes"
+                                        class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white text-xs font-semibold rounded-lg shadow-sm transition-all cursor-pointer flex items-center justify-center min-w-[100px]">
+                                        @if (buscandoImagenes) {
+                                            <span>Buscando...</span>
+                                        } @else {
+                                            <span>Buscar</span>
+                                        }
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Galería de Unsplash -->
+                    @if (imagenesUnsplash && imagenesUnsplash.length > 0) {
+                        <div class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-3">Galería Unsplash (Haz clic para seleccionar)</span>
+                            <div class="grid grid-cols-3 gap-4">
+                                @for(img of imagenesUnsplash; track img.id) {
+                                    <div class="relative group">
+                                        <img [src]="img.url"
+                                            (click)="seleccionarImagen(img.url)"
+                                            class="cursor-pointer hover:opacity-80 rounded-lg object-cover h-32 w-full transition-all border border-slate-200 shadow-sm"
+                                            alt="Unsplash image">
+                                        <div class="mt-1 text-[10px] text-slate-500 truncate group-hover:text-slate-700 transition-colors">
+                                            Foto por <span class="font-medium">{{img.credit}}</span> en Unsplash
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    
+                    @if (historia.imageUrl) {
+                        <div class="mt-4 relative rounded-xl overflow-hidden border border-slate-200 shadow-sm max-h-60 flex justify-center bg-slate-100">
+                            <img [src]="historia.imageUrl" class="object-cover max-h-60 w-full" alt="Vista previa de portada">
+                            <div class="absolute bottom-0 left-0 right-0 bg-slate-900/60 backdrop-blur-xs px-4 py-2 text-white text-xs flex justify-between items-center">
+                                <span>Vista previa de la portada seleccionada</span>
+                                <button type="button" (click)="historia.imageUrl = ''" class="bg-rose-600 hover:bg-rose-700 px-2 py-1 rounded text-[10px] font-bold transition-colors cursor-pointer">Eliminar</button>
+                            </div>
+                        </div>
+                    }
                 </div>
                 <div class="flex items-center gap-3 p-4 bg-slate-50 rounded-lg border border-slate-200 mt-4">
                     <label class="relative inline-flex items-center cursor-pointer">

@@ -1,1 +1,10 @@
+<div class="fixed top-4 right-4 z-50">
+  <button (click)="toggleTema()" class="p-3 rounded-full bg-stone-200 hover:bg-stone-300 dark:bg-[#2d2844] dark:hover:bg-[#3d375a] text-slate-900 dark:text-[#d4c5f9] hover:scale-105 transition-all shadow-md cursor-pointer flex items-center justify-center">
+    @if (!esModoOscuro) {
+      <span>🌙</span>
+    } @else {
+      <span>☀️</span>
+    }
+  </button>
+</div>
 <router-outlet></router-outlet>
