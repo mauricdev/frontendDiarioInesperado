@@ -1,0 +1,181 @@
+<app-admin-nav></app-admin-nav>
+<div class="min-h-screen bg-zinc-100 p-8 font-sans">
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-sm border border-zinc-200 overflow-hidden">
+
+        <div class="bg-slate-900 px-8 py-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-50 tracking-wide">Panel de Administración</h1>
+                <p class="text-sm text-slate-400 mt-1">Redacta y publica nuevas historias en tu revista</p>
+            </div>
+        </div>
+
+        <div class="p-8">
+            <form class="space-y-6">
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-800 mb-2">Título de la historia</label>
+                    <input type="text"
+                        [(ngModel)]="historia.title"
+                        (ngModelChange)="generarLink()"
+                        name="title"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-800 focus:border-emerald-800 outline-none transition-all bg-slate-50 focus:bg-white"
+                        placeholder="Ej. Compré pan añejo para ahorrar 200 pesos...">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-800 mb-2">Autor de la crónica</label>
+                    <select [(ngModel)]="historia.author"
+                        name="author"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-800 focus:border-emerald-800 outline-none transition-all bg-slate-50 focus:bg-white cursor-pointer">
+                        @for (autor of listaAutores; track autor.id) {
+                            <option [value]="autor.name">{{ autor.name }}</option>
+                        }
+                    </select>
+                </div>
+
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-800 mb-2">Contenido completo (Web)</label>
+                    <textarea rows="8"
+                        [(ngModel)]="historia.content"
+                        name="content"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-800 focus:border-emerald-800 outline-none transition-all bg-slate-50 focus:bg-white resize-y"
+                        placeholder="Desarrolla toda la historia rata aquí..."></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-800 mb-2">Foto de la historia (Imagen)</label>
+                    <input type="file"
+                        (change)="onFileSelected($event)"
+                        accept="image/*"
+                        class="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-800 hover:file:bg-emerald-100 cursor-pointer">
+                </div>
+                <div class="flex items-center gap-3 p-4 bg-slate-50 rounded-lg border border-slate-200 mt-4">
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" [(ngModel)]="historia.publicarInstagram" name="publicarInstagram" class="sr-only peer">
+                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                    </label>
+                    <span class="text-sm font-semibold text-slate-700 tracking-wide select-none">
+                        Publicar simultáneamente en Instagram 📸
+                    </span>
+                </div>
+
+                <div class="space-y-2 mt-4">
+                    <label class="block text-sm font-semibold text-slate-800">Resumen para Redes (Gancho)</label>
+                    <textarea rows="3"
+                        [(ngModel)]="historia.socialSummary"
+                        name="socialSummary"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-800 focus:border-emerald-800 outline-none transition-all bg-slate-50 focus:bg-white resize-y text-sm"
+                        placeholder="Escribe aquí los primeros párrafos intrigantes para Instagram..."></textarea>
+                </div>
+
+                <div class="space-y-2 mt-4">
+                    <label class="block text-sm font-semibold text-slate-800">Enlace a la crónica completa</label>
+                    <input type="text"
+                        [(ngModel)]="historia.linkGenerado"
+                        name="linkGenerado"
+                        readonly
+                        class="w-full px-4 py-3 border border-slate-200 rounded-lg outline-none bg-slate-100 text-slate-500 text-sm font-mono cursor-not-allowed select-all"
+                        placeholder="Se autogenerará al escribir el título...">
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-100 mt-6">
+                    @if (historia.id) {
+                        <button type="button"
+                            (click)="cancelarEdicion()"
+                            class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-medium py-3 px-6 rounded-lg transition-colors duration-200 cursor-pointer">
+                            Cancelar edición
+                        </button>
+                        <button type="button"
+                            (click)="guardarHistoria()"
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-lg shadow-md transition-colors duration-200 cursor-pointer">
+                            Actualizar Historia
+                        </button>
+                    } @else {
+                        <button type="button"
+                            (click)="guardarHistoria()"
+                            class="bg-emerald-800 hover:bg-emerald-900 text-white font-medium py-3 px-8 rounded-lg shadow-md transition-colors duration-200 cursor-pointer">
+                            Guardar y Publicar
+                        </button>
+                    }
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- TABLA DE GESTIÓN (DASHBOARD) -->
+    <div class="max-w-4xl mx-auto mt-8 bg-white rounded-xl shadow-sm border border-zinc-200 overflow-hidden">
+        <div class="bg-slate-900 px-8 py-5 border-b border-slate-850 flex justify-between items-center">
+            <div>
+                <h2 class="text-lg font-bold text-slate-50 tracking-wide">Gestión de Crónicas</h2>
+                <p class="text-xs text-slate-400 mt-0.5">Modifica o elimina publicaciones del Diario Inesperado</p>
+            </div>
+            <span class="text-xs font-semibold bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20 uppercase tracking-wider">
+                {{ listaNoticias.length }} CRÓNICAS
+            </span>
+        </div>
+
+        @if (listaNoticias && listaNoticias.length > 0) {
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200 text-slate-700 text-xs font-semibold uppercase tracking-wider">
+                            <th class="px-6 py-4">Título</th>
+                            <th class="px-6 py-4">Autor</th>
+                            <th class="px-6 py-4">Fecha</th>
+                            <th class="px-6 py-4 text-right">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-150 text-sm">
+                        @for (noticia of listaNoticias; track noticia.id) {
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="font-medium text-slate-900 line-clamp-1 max-w-[280px]">
+                                        {{ noticia.title }}
+                                    </div>
+                                    <div class="text-xs text-slate-400 mt-0.5 line-clamp-1 max-w-[280px]">
+                                        {{ noticia.description }}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-stone-100 text-stone-800">
+                                        ✍️ {{ noticia.author }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-xs text-slate-500 font-mono">
+                                    {{ noticia.createdAt | date:'shortDate' }}
+                                </td>
+                                <td class="px-6 py-4 text-right space-x-2">
+                                    <button type="button"
+                                        (click)="editarNoticia(noticia)"
+                                        class="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-semibold rounded-md transition-colors duration-200 cursor-pointer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                        </svg>
+                                        Editar
+                                    </button>
+                                    <button type="button"
+                                        (click)="eliminarNoticia(noticia.id)"
+                                        class="inline-flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-750 text-xs font-semibold rounded-md transition-colors duration-200 cursor-pointer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                        Eliminar
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        } @else {
+            <div class="px-6 py-12 text-center text-slate-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto stroke-slate-300 mb-2" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                No hay crónicas registradas.
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,24 @@
+<nav class="bg-slate-900 text-slate-100 shadow-md py-4 px-6 font-sans">
+    <div class="flex justify-between items-center max-w-7xl mx-auto">
+        <!-- Title (Left) -->
+        <span class="text-lg font-bold tracking-wide font-serif text-slate-50">
+            Panel de Control - El Diario Inesperado
+        </span>
+
+        <!-- Links (Right) -->
+        <div class="flex items-center gap-6 text-sm font-medium">
+            <a routerLink="/admin" routerLinkActive="text-emerald-400" [routerLinkActiveOptions]="{exact: true}" class="hover:text-emerald-400 transition-colors flex items-center gap-1.5 cursor-pointer">
+                📰 Gestión de Crónicas
+            </a>
+            <a routerLink="/admin-authors" routerLinkActive="text-emerald-400" class="hover:text-emerald-400 transition-colors flex items-center gap-1.5 cursor-pointer">
+                🎭 El Multiverso
+            </a>
+            <button (click)="logout()" class="text-slate-400 hover:text-red-400 transition-colors ml-4 border-l border-slate-700 pl-4 cursor-pointer">
+                Cerrar Sesión
+            </button>
+            <a routerLink="/" class="border border-slate-700 rounded-lg py-2 px-4 bg-slate-800 hover:bg-slate-700 hover:text-emerald-400 hover:border-emerald-400 transition-all text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer">
+                👁️ Ver Portada Pública
+            </a>
+        </div>
+    </div>
+</nav>

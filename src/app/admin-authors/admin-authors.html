@@ -1,0 +1,121 @@
+<app-admin-nav></app-admin-nav>
+<div class="min-h-screen bg-zinc-100 p-8 font-sans">
+
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-sm border border-zinc-200 overflow-hidden">
+        <div class="bg-slate-900 px-8 py-6">
+            <h1 class="text-2xl font-bold text-slate-50 tracking-wide">Gestión de Autores</h1>
+            <p class="text-sm text-slate-400 mt-1">Crea y edita los perfiles de los autores del Diario Inesperado</p>
+        </div>
+
+        <div class="p-8">
+            <form class="space-y-6">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-800 mb-2">Nombre del Autor</label>
+                    <input type="text"
+                        [(ngModel)]="autor.name"
+                        name="name"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-800 focus:border-emerald-800 outline-none transition-all bg-slate-50 focus:bg-white"
+                        placeholder="Ej. Lady Whistledown">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-800 mb-2">Biografía / Descripción</label>
+                    <textarea rows="4"
+                        [(ngModel)]="autor.bio"
+                        name="bio"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-800 focus:border-emerald-800 outline-none transition-all bg-slate-50 focus:bg-white resize-y"
+                        placeholder="Breve reseña del autor..."></textarea>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                    @if (autor.id) {
+                        <button type="button"
+                            (click)="cancelarEdicion()"
+                            class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-medium py-3 px-6 rounded-lg transition-colors duration-200 cursor-pointer">
+                            Cancelar edición
+                        </button>
+                        <button type="button"
+                            (click)="guardarAutor()"
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-lg shadow-md transition-colors duration-200 cursor-pointer">
+                            Actualizar Autor
+                        </button>
+                    } @else {
+                        <button type="button"
+                            (click)="guardarAutor()"
+                            class="bg-emerald-800 hover:bg-emerald-900 text-white font-medium py-3 px-8 rounded-lg shadow-md transition-colors duration-200 cursor-pointer">
+                            Guardar y Registrar
+                        </button>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TABLA DE GESTIÓN (DASHBOARD) -->
+    <div class="max-w-4xl mx-auto mt-8 bg-white rounded-xl shadow-sm border border-zinc-200 overflow-hidden">
+        <div class="bg-slate-900 px-8 py-5 border-b border-slate-850 flex justify-between items-center">
+            <div>
+                <h2 class="text-lg font-bold text-slate-50 tracking-wide">Lista de Autores</h2>
+                <p class="text-xs text-slate-400 mt-0.5">Modifica o elimina autores de la revista</p>
+            </div>
+            <span class="text-xs font-semibold bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20 uppercase tracking-wider">
+                {{ listaAutores.length }} AUTORES
+            </span>
+        </div>
+
+        @if (listaAutores && listaAutores.length > 0) {
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200 text-slate-700 text-xs font-semibold uppercase tracking-wider">
+                            <th class="px-6 py-4">Nombre</th>
+                            <th class="px-6 py-4">Biografía</th>
+                            <th class="px-6 py-4">Fecha de Registro</th>
+                            <th class="px-6 py-4 text-right">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-150 text-sm">
+                        @for (item of listaAutores; track item.id) {
+                            <tr class="hover:bg-slate-50/80 transition-colors">
+                                <td class="px-6 py-4 font-medium text-slate-900">
+                                    ✍️ {{ item.name }}
+                                </td>
+                                <td class="px-6 py-4 text-slate-600 max-w-[300px] truncate">
+                                    {{ item.bio || 'Sin biografía' }}
+                                </td>
+                                <td class="px-6 py-4 text-xs text-slate-500 font-mono">
+                                    {{ item.createdAt | date:'shortDate' }}
+                                </td>
+                                <td class="px-6 py-4 text-right space-x-2">
+                                    <button type="button"
+                                        (click)="editarAutor(item)"
+                                        class="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-semibold rounded-md transition-colors duration-200 cursor-pointer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                        </svg>
+                                        Editar
+                                    </button>
+                                    <button type="button"
+                                        (click)="eliminarAutor(item.id)"
+                                        class="inline-flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-750 text-xs font-semibold rounded-md transition-colors duration-200 cursor-pointer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                        Eliminar
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        } @else {
+            <div class="px-6 py-12 text-center text-slate-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto stroke-slate-300 mb-2" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                No hay autores registrados.
+            </div>
+        }
+    </div>
+</div>
