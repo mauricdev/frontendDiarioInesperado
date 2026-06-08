@@ -8,3 +8,24 @@
   </button>
 </div>
 <router-outlet></router-outlet>
+
+<!-- Botón flotante de Mercado Pago -->
+<a href="https://link.mercadopago.cl/eldiarioinesperado" target="_blank" rel="noopener noreferrer"
+   class="fixed bottom-6 right-6 z-50 flex items-center gap-3 pl-2 pr-5 py-2 bg-[#009ee3] hover:bg-[#008cc9] text-white font-bold rounded-full shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 group border border-[#008bc7]">
+  
+  <div class="relative w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm">
+    <span class="absolute inline-flex h-full w-full rounded-full bg-white opacity-40 animate-ping group-hover:hidden"></span>
+    
+    <svg class="w-5 h-5 text-[#009ee3]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 18h4" />
+      <path d="M12 14v4" />
+      <path d="M19 10a4 4 0 0 0-8 0v4h8V10z" />
+      <path d="M5 14h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2z" />
+    </svg>
+  </div>
+  
+  <div class="flex flex-col justify-center">
+    <span class="text-[11px] uppercase tracking-wider text-blue-100 font-medium leading-none mb-0.5">Sostén el diario</span>
+    <span class="text-sm font-extrabold tracking-wide leading-none">Invítame un café ☕</span>
+  </div>
+</a>
