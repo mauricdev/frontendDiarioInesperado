@@ -2,6 +2,7 @@ import { Component, OnInit, signal, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-public-home',
@@ -30,7 +31,7 @@ export class PublicHome implements OnInit {
   cargarNoticias(nuevaPagina: number = 1) {
     this.paginaActual = nuevaPagina;
     
-    this.http.get<any[]>(`http://localhost:3000/posts?page=${this.paginaActual}&limit=${this.limitePorPagina}`)
+    this.http.get<any[]>(`${environment.apiUrl}/posts?page=${this.paginaActual}&limit=${this.limitePorPagina}`)
       .subscribe({
         next: (data) => {
           if (nuevaPagina === 1) {

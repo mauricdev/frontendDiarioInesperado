@@ -5,6 +5,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { marked } from 'marked';
 import { SeoService } from '../core/seo.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-post-detail',
@@ -41,7 +42,7 @@ export class PostDetail implements OnInit {
   }
 
   private cargarNoticia(id: string) {
-    this.http.get<any>(`http://localhost:3000/posts/${id}`).subscribe({
+    this.http.get<any>(`${environment.apiUrl}/posts/${id}`).subscribe({
       next: async (data) => {
         this.noticia.set(data);
         this.historia = data;

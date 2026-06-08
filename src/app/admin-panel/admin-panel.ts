@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // Necesario para leer los inputs
 import { HttpClient } from '@angular/common/http'; // Para enviar la petición
 import { AdminNav } from '../admin-nav/admin-nav';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-admin-panel',
@@ -62,7 +63,7 @@ export class AdminPanel implements OnInit {
     this.generandoIA = true;
     this.cdr.detectChanges();
 
-    this.http.post('http://localhost:3000/posts/generar', { 
+    this.http.post(`${environment.apiUrl}/posts/generar`, { 
       tema: this.temaIA, 
       contextoAutor: this.contextoAutorIA 
     }).subscribe({
@@ -97,7 +98,7 @@ export class AdminPanel implements OnInit {
 
     const q = this.queryUnsplash || this.historia.title || this.temaIA || 'revista';
     
-    this.http.get<any[]>(`http://localhost:3000/posts/imagenes/buscar?q=${encodeURIComponent(q)}&page=1`).subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/posts/imagenes/buscar?q=${encodeURIComponent(q)}&page=1`).subscribe({
       next: (res) => {
         this.imagenesUnsplash = res;
         this.buscandoImagenes = false;
@@ -120,7 +121,7 @@ export class AdminPanel implements OnInit {
 
   // Carga todos los autores desde el backend
   cargarAutores() {
-    this.http.get<any[]>('http://localhost:3000/authors').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/authors`).subscribe({
       next: (data) => {
         this.listaAutores = data;
         this.autores = data;
@@ -140,7 +141,7 @@ export class AdminPanel implements OnInit {
 
   // Carga todas las noticias desde el backend
   cargarNoticias() {
-    this.http.get<any[]>('http://localhost:3000/posts').subscribe({
+    this.http.get<any[]>(`${environment.apiUrl}/posts`).subscribe({
       next: (data) => {
         this.listaNoticias = data;
         this.cdr.detectChanges(); // <-- Forzar detección de cambios sincrónica en Zoneless
@@ -186,8 +187,8 @@ export class AdminPanel implements OnInit {
 
     const esEdicion = !!this.historia.id;
     const url = esEdicion 
-      ? `http://localhost:3000/posts/${this.historia.id}` 
-      : 'http://localhost:3000/posts';
+      ? `${environment.apiUrl}/posts/${this.historia.id}` 
+      : `${environment.apiUrl}/posts`;
 
     const peticion = esEdicion 
       ? this.http.patch(url, formData) 
@@ -240,7 +241,7 @@ export class AdminPanel implements OnInit {
   // Elimina una noticia por ID tras confirmación
   eliminarNoticia(id: number) {
     if (confirm('¿Estás seguro de eliminar esta noticia?')) {
-      this.http.delete(`http://localhost:3000/posts/${id}`).subscribe({
+      this.http.delete(`${environment.apiUrl}/posts/${id}`).subscribe({
         next: () => {
           alert('Historia eliminada con éxito.');
           this.cargarNoticias();
