@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 import { SeoService } from '../core/seo.service';
 import { environment } from '../../environments/environment';
 
@@ -46,8 +47,10 @@ export class PostDetail implements OnInit {
       next: async (data) => {
         this.noticia.set(data);
         this.historia = data;
-        const parsedHtml = await marked.parse(data.content || '');
-        this.parsedContent.set(parsedHtml);
+        const rawHtml = await marked.parse(data.content || '');
+        const cleanHtml = DOMPurify.sanitize(rawHtml);
+        this.parsedContent.set(cleanHtml);
+
         
         // Inyectamos el SEO dinámico
         this.seoService.generarTags({
