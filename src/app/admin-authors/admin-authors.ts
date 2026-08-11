@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { finalize } from 'rxjs';
 import { AdminNav } from '../admin-nav/admin-nav';
 import { environment } from '../../environments/environment';
 
@@ -13,6 +14,8 @@ import { environment } from '../../environments/environment';
   styleUrl: './admin-authors.scss',
 })
 export class AdminAuthors implements OnInit {
+  isSaving: boolean = false;
+
   autor: any = {
     id: undefined,
     name: '',
@@ -41,27 +44,42 @@ export class AdminAuthors implements OnInit {
   }
 
   guardarAutor() {
+    if (this.isSaving) return; // Protección contra doble clic
+
     if (!this.autor.name || !this.autor.name.trim()) {
       alert('El nombre del autor es obligatorio.');
       return;
     }
 
     console.log('Guardando autor...', this.autor);
+    this.isSaving = true;
+    this.cdr.detectChanges();
+
     const esEdicion = !!this.autor.id;
     const url = esEdicion 
       ? `${environment.apiUrl}/authors/${this.autor.id}`
       : `${environment.apiUrl}/authors`;
 
-    const peticion = esEdicion
-      ? this.http.patch(url, { name: this.autor.name, bio: this.autor.bio })
-      : this.http.post(url, { name: this.autor.name, bio: this.autor.bio });
+    // Si es nuevo registro, omitimos ID en el payload
+    const payload = {
+      name: this.autor.name.trim(),
+      bio: this.autor.bio ? this.autor.bio.trim() : ''
+    };
 
-    peticion.subscribe({
+    const peticion = esEdicion
+      ? this.http.patch(url, payload)
+      : this.http.post(url, payload);
+
+    peticion.pipe(
+      finalize(() => {
+        this.isSaving = false;
+        this.cdr.detectChanges();
+      })
+    ).subscribe({
       next: (respuesta) => {
         alert(esEdicion ? '¡Autor actualizado con éxito!' : '¡Autor guardado con éxito!');
         this.cancelarEdicion();
         this.cargarAutores();
-        this.cdr.detectChanges();
       },
       error: (error) => {
         alert('Hubo un error al guardar. Revisa la consola.');
