@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // Necesario para leer los inputs
 import { HttpClient } from '@angular/common/http'; // Para enviar la petición
+import { finalize } from 'rxjs'; // Para asegurar el reseteo del estado de carga
 import { AdminNav } from '../admin-nav/admin-nav';
 import { environment } from '../../environments/environment';
 
@@ -12,6 +13,9 @@ import { environment } from '../../environments/environment';
   templateUrl: './admin-panel.html',
 })
 export class AdminPanel implements OnInit {
+  // Estado de carga para proteger el botón de guardar/publicar contra doble clic
+  isPublishing: boolean = false;
+
   // Aquí guardaremos lo que escribas en el formulario
   historia: any = {
     id: undefined,
@@ -153,6 +157,15 @@ export class AdminPanel implements OnInit {
     });
   }
 
+  // Sincroniza automáticamente el dropdown del autor de la crónica al seleccionar en la IA
+  onAutorIAChange() {
+    const autorSeleccionado = this.autores.find(a => a.bio === this.contextoAutorIA);
+    if (autorSeleccionado) {
+      this.historia.author = autorSeleccionado.name;
+      this.cdr.detectChanges();
+    }
+  }
+
   // Captura el archivo seleccionado del input
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -165,7 +178,12 @@ export class AdminPanel implements OnInit {
 
   // Esta función se ejecutará al hacer clic en el botón guardar/actualizar
   guardarHistoria() {
+    if (this.isPublishing) return; // Evitamos doble clic si ya se está procesando
+
     console.log('Enviando datos...', this.historia);
+
+    this.isPublishing = true;
+    this.cdr.detectChanges();
 
     const formData = new FormData();
     formData.append('title', this.historia.title);
@@ -198,7 +216,13 @@ export class AdminPanel implements OnInit {
       console.log('⚡ ACCIÓN PENDIENTE: Enviar a la API de Meta');
     }
 
-    peticion.subscribe({
+    peticion.pipe(
+      finalize(() => {
+        // finalize se ejecuta SIEMPRE al terminar (éxito o error)
+        this.isPublishing = false;
+        this.cdr.detectChanges();
+      })
+    ).subscribe({
       next: (respuesta) => {
         alert(esEdicion ? '¡Historia actualizada con éxito!' : '¡Historia guardada con éxito en la Base de Datos!');
         console.log('Respuesta del servidor:', respuesta);
@@ -206,7 +230,6 @@ export class AdminPanel implements OnInit {
         // Limpiamos el formulario y refrescamos la lista
         this.cancelarEdicion();
         this.cargarNoticias();
-        this.cdr.detectChanges(); // <-- Forzar detección de cambios sincrónica
       },
       error: (error) => {
         alert('Hubo un error al guardar. Revisa la consola.');
