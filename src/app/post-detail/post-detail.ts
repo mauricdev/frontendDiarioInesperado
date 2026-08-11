@@ -76,21 +76,13 @@ export class PostDetail implements OnInit {
     // 1. Actualizar el título de la pestaña del navegador
     this.title.setTitle(`${this.historia.title} | El Diario Inesperado`);
 
-    // 2. Limpiar etiquetas anteriores para evitar duplicados
-    this.meta.removeTag('property="og:title"');
-    this.meta.removeTag('property="og:description"');
-    this.meta.removeTag('property="og:image"');
-    this.meta.removeTag('property="og:url"');
-
-    // 3. Inyectar las nuevas etiquetas Open Graph
-    this.meta.addTags([
-      { property: 'og:type', content: 'article' },
-      { property: 'og:title', content: this.historia.title },
-      { property: 'og:description', content: this.historia.socialSummary || this.historia.description },
-      { property: 'og:image', content: this.historia.imageUrl || 'https://eldiarioinesperado.cl/assets/logo.png' },
-      { property: 'og:url', content: window.location.href },
-      { name: 'twitter:card', content: 'summary_large_image' }
-    ]);
+    // 2. Actualizar etiquetas Open Graph dinámicamente
+    this.meta.updateTag({ property: 'og:type', content: 'article' });
+    this.meta.updateTag({ property: 'og:title', content: this.historia.title });
+    this.meta.updateTag({ property: 'og:description', content: this.historia.socialSummary || this.historia.description });
+    this.meta.updateTag({ property: 'og:image', content: this.historia.imageUrl || 'https://eldiarioinesperado.cl/assets/logo.png' });
+    this.meta.updateTag({ property: 'og:url', content: window.location.href });
+    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
   }
 
   compartirWhatsApp() {
