@@ -125,7 +125,7 @@
   border-radius: 50%;
   flex-shrink: 0;
   margin-right: 6px;
-  display: block;
+  display: inline-block;
 }
 
 .live-text {
@@ -133,10 +133,10 @@
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.08em;
-  line-height: 1;
+  line-height: 1.2;
   margin: 0;
   padding: 0;
-  display: block;
+  display: inline-block;
 }
 
 // Pie de página de la tarjeta (Ticker de TV)
@@ -153,8 +153,7 @@
 .social-card-author-badge {
   align-self: flex-start;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
   background: rgba(15, 23, 42, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 4px;
@@ -171,7 +170,8 @@
   font-weight: 800;
   padding: 6px 12px;
   letter-spacing: 0.06em;
-  line-height: 1;
+  line-height: 1.2;
+  margin: 0;
 }
 
 .author-name {
@@ -182,8 +182,9 @@
   font-family: 'Inter', sans-serif;
   font-size: 11px;
   font-weight: 700;
-  padding: 6px 14px;
-  line-height: 1;
+  padding: 6px 12px;
+  line-height: 1.2;
+  margin: 0;
 }
 
 // Caja Blanca del Titular Principal
