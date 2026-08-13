@@ -3,6 +3,21 @@
     {
       "source": "/sitemap.xml",
       "destination": "https://api.eldiarioinesperado.cl/sitemap.xml"
+    },
+    {
+      "source": "/noticia/:id*",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|WhatsApp|Twitterbot|LinkedInBot|Pinterest|TelegramBot|Slackbot|Discordbot|bot|crawler).*"
+        }
+      ],
+      "destination": "https://api.eldiarioinesperado.cl/noticia/:id*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
