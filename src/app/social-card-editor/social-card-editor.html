@@ -1,55 +1,56 @@
 <div class="social-card-editor-wrapper">
-  <!-- Tarjeta para capturar. Su tamaño de visualización en el panel será responsivo con aspect-ratio -->
-  <div class="social-card-container" #socialCardContainer id="socialCardContainer">
-    <!-- Imagen de fondo -->
-    @if (imageUrl) {
-      <img [src]="imageUrl" crossorigin="anonymous" class="social-card-bg" alt="Fondo de Social Card">
-    } @else {
-      <div class="social-card-bg-fallback">
-        <span class="text-slate-400">Selecciona una imagen de Unsplash</span>
-      </div>
-    }
-
-    <!-- Gradiente de fondo oscuro para contraste y legibilidad -->
-    <div class="social-card-overlay"></div>
-
-    <!-- Marca superior: El Diario Inesperado + Badge de Categoría/Vivo -->
-    <div class="social-card-header">
-      <div class="social-card-brand">
-        <span class="brand-text">EL DIARIO INESPERADO</span>
-        <span class="brand-sub">CRÓNICA DIGITAL</span>
-      </div>
-      <div class="social-card-live">
-        <span class="live-dot"></span>
-        <span class="live-text">VIVO</span>
-      </div>
-    </div>
-
-    <!-- Cuerpo / Ticker de Noticiero de TV en la parte inferior -->
-    <div class="social-card-footer">
-      <!-- Autor Badge flotante -->
-      @if (authorName) {
-        <div class="social-card-author-badge">
-          <span class="author-label">REPORTERO</span>
-          <span class="author-name">{{ authorName }}</span>
+  <!-- Viewport contenedor responsivo -->
+  <div class="social-card-viewport" #viewport>
+    <!-- Tarjeta HD de tamaño fijo (1200x675) para que no haya distorsiones al capturar -->
+    <div class="social-card-container" #socialCardContainer [style.transform]="'scale(' + scaleFactor + ')'">
+      <!-- Imagen de fondo -->
+      @if (imageUrl) {
+        <img [src]="imageUrl" crossorigin="anonymous" class="social-card-bg" alt="Fondo de Social Card">
+      } @else {
+        <div class="social-card-bg-fallback">
+          <span>Selecciona una imagen de Unsplash</span>
         </div>
       }
 
-      <!-- Rectángulo del Titular (Estilo Ticker TV) -->
-      <div class="social-card-title-box">
-        <div class="social-card-ticker-accent"></div>
-        <div class="social-card-title-content">
-          <h1 class="social-card-title">{{ title || 'TITULAR DE LA NOTICIA EN DESARROLLO...' }}</h1>
+      <!-- Gradiente de fondo oscuro para legibilidad -->
+      <div class="social-card-overlay"></div>
+
+      <!-- Encabezado superior -->
+      <div class="social-card-header">
+        <div class="social-card-brand">
+          <span class="brand-text">EL DIARIO INESPERADO</span>
+          <span class="brand-sub">CRÓNICA DIGITAL</span>
+        </div>
+        <div class="social-card-live">
+          <span class="live-dot"></span>
+          <span class="live-text">VIVO</span>
+        </div>
+      </div>
+
+      <!-- Pie de página (Ticker de TV) -->
+      <div class="social-card-footer">
+        @if (authorName) {
+          <div class="social-card-author-badge">
+            <span class="author-label">REPORTERO</span>
+            <span class="author-name">{{ authorName }}</span>
+          </div>
+        }
+
+        <div class="social-card-title-box">
+          <div class="social-card-ticker-accent"></div>
+          <div class="social-card-title-content">
+            <h1 class="social-card-title">{{ title || 'TITULAR DE LA NOTICIA EN DESARROLLO...' }}</h1>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Botones y estados de previsualización final -->
+  <!-- Botones de Acción -->
   <div class="social-card-actions mt-4 flex flex-col sm:flex-row gap-4 items-center justify-between p-4 bg-slate-900 rounded-xl border border-slate-800">
     <div class="text-left">
-      <h4 class="text-sm font-semibold text-white">Generador de Social Card</h4>
-      <p class="text-xs text-slate-400">Genera una gráfica con estilo de transmisión de TV lista para tus redes sociales.</p>
+      <h4 class="text-sm font-semibold text-white">Generador de Social Card (1200x675 HD)</h4>
+      <p class="text-xs text-slate-400">Captura en alta resolución lista para publicar en Instagram, Facebook y X.</p>
     </div>
     
     <div class="flex gap-2">
@@ -67,7 +68,7 @@
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <span>Generando...</span>
+          <span>Generando HD...</span>
         } @else {
           <span>✨</span>
           <span>{{ previewGeneratedUrl ? 'Regenerar Gráfica' : 'Generar Gráfica' }}</span>
@@ -80,7 +81,7 @@
   @if (previewGeneratedUrl) {
     <div class="mt-4 p-4 bg-emerald-950/20 border border-emerald-800/30 rounded-xl">
       <div class="flex items-center gap-2 mb-2 text-emerald-400">
-        <span class="text-xs font-bold uppercase tracking-wider">✓ Gráfica Generada Exitosamente</span>
+        <span class="text-xs font-bold uppercase tracking-wider">✓ Gráfica HD Generada Exitosamente</span>
       </div>
       <div class="relative rounded-lg overflow-hidden border border-emerald-800/40">
         <img [src]="previewGeneratedUrl" class="w-full h-auto object-contain" alt="Gráfica final capturada">
