@@ -37,6 +37,8 @@ export class SeoService {
     this.metaService.updateTag({ property: 'og:title', content: fullTitle });
     this.metaService.updateTag({ property: 'og:description', content: description });
     this.metaService.updateTag({ property: 'og:image', content: imageUrl });
+    this.metaService.updateTag({ property: 'og:image:width', content: '1200' });
+    this.metaService.updateTag({ property: 'og:image:height', content: '630' });
     this.metaService.updateTag({ property: 'og:url', content: canonicalUrl });
 
     // 4. Twitter Cards
