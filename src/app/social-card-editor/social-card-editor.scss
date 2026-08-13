@@ -45,7 +45,7 @@
   }
 }
 
-// Gradiente de fondo oscuro para contraste y legibilidad
+// Gradiente de fondo oscuro para legibilidad
 .social-card-overlay {
   position: absolute;
   inset: 0;
@@ -103,17 +103,16 @@
 .social-card-live {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   background: #e11d48;
-  padding: 4px 12px;
+  padding: 6px 14px;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(225, 29, 72, 0.4);
-  line-height: 1;
 }
 
 .live-dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   background-color: #ffffff;
   border-radius: 50%;
   flex-shrink: 0;
@@ -125,7 +124,7 @@
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.08em;
-  line-height: 1;
+  line-height: 1.3;
   margin: 0;
   padding: 0;
   display: block;
@@ -141,27 +140,26 @@
   gap: 10px;
 }
 
-// Badge de Reportero / Autor
+// Badge de Reportero / Autor (Fuerza alineación y altura idéntica entre etiqueta y nombre)
 .social-card-author-badge {
   align-self: flex-start;
   display: inline-flex;
-  align-items: center;
+  align-items: stretch;
   background: rgba(15, 23, 42, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 4px;
   overflow: hidden;
-  line-height: 1;
 }
 
 .author-label {
   background: #4f46e5; // Indigo
   color: #ffffff;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
-  padding: 4px 10px;
+  padding: 6px 12px;
   letter-spacing: 0.06em;
-  line-height: 1;
-  display: inline-flex;
+  line-height: 1.3;
+  display: flex;
   align-items: center;
 }
 
@@ -170,9 +168,9 @@
   font-family: 'Inter', sans-serif;
   font-size: 11px;
   font-weight: 700;
-  padding: 4px 12px;
-  line-height: 1;
-  display: inline-flex;
+  padding: 6px 14px;
+  line-height: 1.3;
+  display: flex;
   align-items: center;
 }
 
@@ -206,6 +204,5 @@
   line-height: 1.25;
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: -0.01em;
   word-break: break-word;
 }
