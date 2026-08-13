@@ -1,8 +1,8 @@
 <div class="min-h-screen bg-[#f4f1ea] dark:bg-[#161423] text-gray-900 dark:text-[#e0d8f5] font-sans p-6 md:p-12 transition-colors duration-300">
     <div class="max-w-4xl mx-auto">
 
-        <!-- BOTÓN RETORNO -->
-        <div class="mb-8">
+        <!-- BOTÓN RETORNO SEMÁNTICO -->
+        <nav aria-label="Navegación secundaria" class="mb-8">
             <a routerLink="/"
                 class="inline-flex items-center gap-2 text-sm text-slate-500 dark:text-[#b0a8cc] hover:text-emerald-800 dark:hover:text-[#b09eec] transition-colors font-medium">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
@@ -12,45 +12,49 @@
                 </svg>
                 Volver a la portada
             </a>
-        </div>
+        </nav>
 
         @if (noticia()) {
-        <article>
+        <article itemscope itemtype="https://schema.org/NewsArticle">
             <!-- CABECERA DE LA NOTICIA -->
             <header class="text-center mb-10">
                 <span
                     class="text-xs font-bold text-emerald-800 dark:text-[#161423] bg-emerald-50 dark:bg-[#b09eec] px-3 py-1 rounded-md uppercase tracking-wider">
-                    ✍️ LA CRÓNICA DE {{ (noticia().author || 'Redactor Anónimo') | uppercase }}
+                    ✍️ LA CRÓNICA DE <span itemprop="author">{{ (noticia().author || 'Redactor Anónimo') | uppercase }}</span>
                 </span>
 
-                <h1
+                <!-- Único H1 de la página para SEO -->
+                <h1 itemprop="headline"
                     class="font-serif text-4xl md:text-6xl font-black text-slate-950 dark:text-[#e0d8f5] tracking-tight leading-tight mt-6 mb-4">
                     {{ noticia().title }}
                 </h1>
 
-                <p class="font-serif italic text-lg md:text-xl text-slate-700 dark:text-[#b0a8cc] max-w-2xl mx-auto mt-2 leading-relaxed">
+                <p itemprop="description" class="font-serif italic text-lg md:text-xl text-slate-700 dark:text-[#b0a8cc] max-w-2xl mx-auto mt-2 leading-relaxed">
                     {{ noticia().description }}
                 </p>
 
                 <div
                     class="flex items-center justify-center gap-4 text-xs text-slate-500 dark:text-[#b0a8cc] font-medium uppercase tracking-wider mt-6 pt-4 border-t border-stone-200 dark:border-[#3b345c]">
-                    <span>Publicado el {{ noticia().createdAt | date:'dd MMMM, yyyy':'':'es-CL' }}</span>
+                    <time [attr.datetime]="noticia().createdAt" itemprop="datePublished">
+                        Publicado el {{ noticia().createdAt | date:'dd MMMM, yyyy':'':'es-CL' }}
+                    </time>
                     <span>•</span>
                     <span>Edición Interdimensional</span>
                 </div>
             </header>
 
-            <!-- FOTO DE PORTADA -->
+            <!-- FOTO DE PORTADA CON FIGURE / FIGCAPTION -->
             @if (noticia().imageUrl) {
-            <div
+            <figure
                 class="w-full max-w-4xl mx-auto rounded-xl overflow-hidden shadow-sm mb-12 border border-[#e6e2d8] dark:border-[#3b345c] bg-[#fdfbf7] dark:bg-[#231f38] p-2">
-                <img [src]="noticia().imageUrl" [alt]="noticia().title"
+                <img [src]="noticia().imageUrl" [alt]="noticia().title" itemprop="image"
                     class="w-full h-auto max-h-[500px] object-cover rounded-lg">
-            </div>
+                <figcaption class="sr-only">Portada gráfica de la crónica: {{ noticia().title }}</figcaption>
+            </figure>
             }
 
-            <!-- CUERPO DE LA CRÓNICA -->
-            <main class="max-w-2xl mx-auto mt-10">
+            <!-- CUERPO DE LA CRÓNICA (Sección Semántica) -->
+            <section itemprop="articleBody" class="max-w-2xl mx-auto mt-10">
                 <div [innerHTML]="parsedContent()" class="articulo-markdown font-serif text-lg leading-relaxed text-gray-800 dark:text-gray-100 transition-colors duration-300"></div>
 
                 <!-- COMPARTIR EN REDES -->
@@ -69,9 +73,9 @@
                         Postear en X
                     </button>
                 </div>
-            </main>
- 
-            <!-- PIE DE PAGINA ADICIONAL DE ESTILO DIARIO -->
+            </section>
+
+            <!-- PIE DE PÁGINA DE LA CRÓNICA -->
             <footer
                 class="max-w-2xl mx-auto mt-16 pt-8 border-t border-stone-300 dark:border-[#3b345c] text-center text-xs text-slate-500 dark:text-[#b0a8cc] italic">
                 Fin de la crónica. Todos los chismes pertenecen a la autora.

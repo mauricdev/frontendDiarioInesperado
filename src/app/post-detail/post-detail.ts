@@ -2,7 +2,6 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { Meta, Title } from '@angular/platform-browser';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 import { SeoService } from '../core/seo.service';
@@ -23,9 +22,7 @@ export class PostDetail implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
-    private seoService: SeoService,
-    private meta: Meta,
-    private title: Title
+    private seoService: SeoService
   ) {}
 
   ngOnInit() {
@@ -51,38 +48,27 @@ export class PostDetail implements OnInit {
         const cleanHtml = DOMPurify.sanitize(rawHtml);
         this.parsedContent.set(cleanHtml);
 
-        
-        // Inyectamos el SEO dinámico
-        this.seoService.generarTags({
+        // Generar slug amigable para el SEO
+        const slugTitle = data.title
+          ? data.title.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\w\s-]/g, '').replace(/[\s_]+/g, '-').replace(/^-+|-+$/g, '')
+          : 'noticia';
+
+        // Inyectamos el SEO dinámico completo mediante SeoService
+        this.seoService.setSeoData({
           title: data.title,
-          description: data.socialSummary,
+          description: data.socialSummary || data.description,
           image: data.imageUrl,
-          slug: 'noticia/' + data.id
+          slug: `cronica/${data.id}/${slugTitle}`,
+          author: data.author,
+          publishedAt: data.createdAt
         });
 
-        this.actualizarMetaTags();
-
-        console.log('Detalle de noticia cargado:', data);
+        console.log('Detalle de noticia cargado e indexado:', data);
       },
       error: (err) => {
         console.error('Error al cargar detalle de noticia:', err);
       }
     });
-  }
-
-  actualizarMetaTags() {
-    if (!this.historia) return;
-    
-    // 1. Actualizar el título de la pestaña del navegador
-    this.title.setTitle(`${this.historia.title} | El Diario Inesperado`);
-
-    // 2. Actualizar etiquetas Open Graph dinámicamente
-    this.meta.updateTag({ property: 'og:type', content: 'article' });
-    this.meta.updateTag({ property: 'og:title', content: this.historia.title });
-    this.meta.updateTag({ property: 'og:description', content: this.historia.socialSummary || this.historia.description });
-    this.meta.updateTag({ property: 'og:image', content: this.historia.imageUrl || 'https://eldiarioinesperado.cl/assets/logo.png' });
-    this.meta.updateTag({ property: 'og:url', content: window.location.href });
-    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
   }
 
   compartirWhatsApp() {

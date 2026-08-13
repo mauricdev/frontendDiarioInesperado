@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://api.eldiarioinesperado.cl/sitemap.xml"
+    }
+  ]
+}

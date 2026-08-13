@@ -8,8 +8,10 @@ import { authGuard } from './core/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: PublicHome },
+  { path: 'noticia', redirectTo: '', pathMatch: 'full' },
   { path: 'noticia/:id', component: PostDetail },
   { path: 'login', component: AdminLogin },
   { path: 'admin', component: AdminPanel, canActivate: [authGuard] },
-  { path: 'admin-authors', component: AdminAuthors, canActivate: [authGuard] }
+  { path: 'admin-authors', component: AdminAuthors, canActivate: [authGuard] },
+  { path: '**', redirectTo: '' }
 ];
