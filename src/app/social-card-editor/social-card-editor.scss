@@ -17,7 +17,7 @@
   aspect-ratio: 4 / 5; // Formato estricto 1080x1350px
   position: relative;
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: 0; // Esquinas cuadradas (90°) para exportar una imagen rectangular perfecta sin artefactos en Instagram
   background-color: #0f172a;
   box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.08);
