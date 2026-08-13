@@ -98,16 +98,20 @@
 }
 
 .social-card-live {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.8cqw;
+  justify-content: center;
+  gap: 0.7cqw;
   background: #e11d48;
-  padding: 0.6cqw 1.8cqw;
+  padding: 0.6cqw 1.6cqw;
   border-radius: 4px;
   box-shadow: 0 4px 12px rgba(225, 29, 72, 0.4);
+  line-height: 1;
 }
 
 .live-dot {
+  display: block;
+  flex-shrink: 0;
   width: 1cqw;
   height: 1cqw;
   background-color: #ffffff;
@@ -116,10 +120,15 @@
 }
 
 .live-text {
+  display: inline-block;
   color: #ffffff;
   font-size: 1.2cqw;
   font-weight: 800;
   letter-spacing: 0.1em;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  transform: translateY(-0.05cqw); // Ajuste fino óptico para html2canvas
 }
 
 // Pie de página de la tarjeta (Ticker de TV)
@@ -134,13 +143,14 @@
 
 .social-card-author-badge {
   align-self: flex-start;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   background: rgba(15, 23, 42, 0.9);
   border: 0.1cqw solid rgba(255, 255, 255, 0.15);
   border-radius: 4px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  line-height: 1;
 }
 
 .author-label {
@@ -148,8 +158,11 @@
   color: #ffffff;
   font-size: 1.1cqw;
   font-weight: 800;
-  padding: 0.5cqw 1.4cqw;
+  padding: 0.6cqw 1.4cqw;
   letter-spacing: 0.08em;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
 }
 
 .author-name {
@@ -157,7 +170,10 @@
   font-family: 'Inter', sans-serif;
   font-size: 1.2cqw;
   font-weight: 700;
-  padding: 0.5cqw 1.6cqw;
+  padding: 0.6cqw 1.6cqw;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
 }
 
 // Caja del Titular
