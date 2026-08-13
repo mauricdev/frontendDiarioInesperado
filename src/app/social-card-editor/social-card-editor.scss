@@ -126,6 +126,8 @@
   flex-shrink: 0;
   margin-right: 6px;
   display: inline-block;
+  position: relative;
+  top: -1px;
 }
 
 .live-text {
@@ -137,6 +139,8 @@
   margin: 0;
   padding: 0;
   display: inline-block;
+  position: relative;
+  top: -1.5px;
 }
 
 // Pie de página de la tarjeta (Ticker de TV)
@@ -172,6 +176,8 @@
   letter-spacing: 0.06em;
   line-height: 1.2;
   margin: 0;
+  position: relative;
+  top: -1.5px;
 }
 
 .author-name {
@@ -185,6 +191,8 @@
   padding: 6px 12px;
   line-height: 1.2;
   margin: 0;
+  position: relative;
+  top: -1.5px;
 }
 
 // Caja Blanca del Titular Principal
@@ -220,4 +228,6 @@
   padding: 0;
   text-transform: uppercase;
   word-break: break-word;
+  position: relative;
+  top: -2px;
 }
