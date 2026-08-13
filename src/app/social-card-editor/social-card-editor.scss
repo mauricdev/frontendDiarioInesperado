@@ -107,38 +107,7 @@
   line-height: 1;
 }
 
-// Pastilla VIVO (Sin Flexbox, optimizado para html2canvas)
-.social-card-live {
-  display: block; 
-  background: #e11d48;
-  padding: 5px 14px 6px 14px; // Padding asimétrico ajustado
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(225, 29, 72, 0.4);
-  white-space: nowrap;
-}
 
-.live-dot {
-  width: 8px;
-  height: 8px;
-  background-color: #ffffff;
-  border-radius: 50%;
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 6px;
-  margin-top: -2px; // Elevación óptica manual
-}
-
-.live-text {
-  color: #ffffff;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  line-height: normal;
-  margin: 0;
-  padding: 0;
-  display: inline-block;
-  vertical-align: middle;
-}
 
 // Pie de página de la tarjeta (Ticker de TV)
 .social-card-footer {
