@@ -9,23 +9,23 @@
   position: relative;
 }
 
+// 1. Contenedor Principal: Formato Instagram Portrait (Relación 4:5 - 1080x1350px)
 .social-card-container {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  max-width: 500px; // Tamaño óptimo de visualización responsiva en el panel
+  margin: 0 auto;
+  aspect-ratio: 4 / 5; // Formato estricto 1080x1350px
   position: relative;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: 16px;
   background-color: #0f172a;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.08);
   font-family: 'Outfit', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
   user-select: none;
 }
 
-// Imagen de fondo y fallback
+// 2. Fondo Completo (Full Bleed)
 .social-card-bg {
   position: absolute;
   inset: 0;
@@ -52,29 +52,38 @@
   }
 }
 
-// Gradiente de fondo oscuro para legibilidad
+// Overlay de gradiente oscuro para contraste
 .social-card-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(15, 23, 42, 0.6) 0%,
-    rgba(15, 23, 42, 0.15) 35%,
-    rgba(15, 23, 42, 0.4) 65%,
-    rgba(15, 23, 42, 0.92) 100%
+    rgba(15, 23, 42, 0.65) 0%,
+    rgba(15, 23, 42, 0.15) 30%,
+    rgba(15, 23, 42, 0.4) 60%,
+    rgba(15, 23, 42, 0.95) 100%
   );
   z-index: 2;
   pointer-events: none;
 }
 
-// Encabezado Superior
-.social-card-header {
-  position: relative;
+// 3. "Safe Area" del Contenido (Padding perimetral de seguridad para Instagram: 32px / ~60px a 1080px)
+.social-card-safe-area {
+  position: absolute;
+  inset: 0;
   z-index: 3;
+  padding: 36px 28px; // Margen de seguridad interno para evitar recortes de esquinas de Instagram
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
+  pointer-events: none;
+}
+
+// Encabezado Superior (Marca)
+.social-card-header {
+  display: flex;
+  justify-content: flex-start;
   align-items: flex-start;
-  padding: 16px 20px;
 }
 
 .social-card-brand {
@@ -82,16 +91,17 @@
   flex-direction: column;
   justify-content: center;
   background: rgba(15, 23, 42, 0.88);
-  padding: 6px 14px;
-  border-left: 3px solid #e11d48; // Fucsia/Carmesí
-  border-radius: 2px;
+  padding: 8px 16px;
+  border-left: 4px solid #e11d48; // Fucsia/Carmesí
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .brand-text {
   font-family: 'Outfit', 'Inter', sans-serif;
   font-size: 15px;
   font-weight: 900;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   color: #ffffff;
   line-height: 1;
   margin: 0;
@@ -102,21 +112,16 @@
   font-size: 9px;
   font-weight: 700;
   color: #94a3b8;
-  letter-spacing: 0.18em;
-  margin-top: 3px;
+  letter-spacing: 0.2em;
+  margin-top: 4px;
   line-height: 1;
 }
 
-
-
-// Pie de página de la tarjeta (Ticker de TV)
+// Pie de página (Anclado a la parte inferior dentro del Safe Area)
 .social-card-footer {
-  position: relative;
-  z-index: 3;
-  padding: 16px 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 // Pastilla de Reportero / Autor
@@ -128,6 +133,7 @@
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 4px;
   overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .author-label {
@@ -136,9 +142,9 @@
   justify-content: center;
   background: #4f46e5; // Indigo
   color: #ffffff;
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 800;
-  padding: 5px 12px 7px 12px;
+  padding: 6px 14px;
   letter-spacing: 0.06em;
   line-height: 1.2;
   margin: 0;
@@ -150,9 +156,9 @@
   justify-content: center;
   color: #f8fafc;
   font-family: 'Inter', sans-serif;
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 700;
-  padding: 5px 12px 7px 12px;
+  padding: 6px 14px;
   line-height: 1.2;
   margin: 0;
 }
@@ -162,19 +168,19 @@
   display: flex;
   align-items: stretch;
   background: #ffffff;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .social-card-ticker-accent {
-  width: 8px;
+  width: 10px;
   background: linear-gradient(135deg, #d946ef 0%, #e11d48 100%);
   flex-shrink: 0;
 }
 
 .social-card-title-content {
-  padding: 13px 18px 15px 18px;
+  padding: 16px 20px 18px 20px;
   flex-grow: 1;
   display: flex;
   align-items: center;
@@ -182,10 +188,10 @@
 
 .social-card-title {
   font-family: 'Outfit', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 900;
   color: #0f172a; // Slate 900
-  line-height: 1.2;
+  line-height: 1.25;
   margin: 0;
   padding: 0;
   text-transform: uppercase;

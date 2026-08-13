@@ -1,51 +1,52 @@
 <div class="social-card-editor-wrapper">
-  <!-- Tarjeta dinámicos responsiva -->
+  <!-- Contenedor principal de la Social Card (Formato Instagram Portrait 4:5) -->
   <div class="social-card-container" #socialCardContainer id="socialCardContainer">
-    <!-- Imagen de fondo -->
+    <!-- 1. Fondo completo (Full Bleed) -->
     @if (imageUrl) {
       <img [src]="imageUrl" crossorigin="anonymous" class="social-card-bg" alt="Fondo de Social Card">
     } @else {
       <div class="social-card-bg-fallback">
-        <span class="text-slate-400">Selecciona una imagen de Unsplash</span>
+        <span>Selecciona una imagen de Unsplash</span>
       </div>
     }
 
-    <!-- Gradiente de fondo oscuro para legibilidad -->
+    <!-- Overlay de gradiente oscuro para legibilidad -->
     <div class="social-card-overlay"></div>
 
-    <!-- Marca superior: El Diario Inesperado -->
-    <div class="social-card-header">
-      <div class="social-card-brand">
-        <span class="brand-text">EL DIARIO INESPERADO</span>
-        <span class="brand-sub">CRÓNICA DIGITAL</span>
-      </div>
-    </div>
-
-    <!-- Cuerpo / Ticker de Noticiero de TV en la parte inferior -->
-    <div class="social-card-footer">
-      <!-- Autor Badge flotante -->
-      @if (authorName) {
-        <div class="social-card-author-badge">
-          <span class="author-label">REPORTERO</span>
-          <span class="author-name">{{ authorName }}</span>
+    <!-- 2. "Safe Area" del contenido (Padding perimetral de seguridad para Instagram) -->
+    <div class="social-card-safe-area">
+      <!-- Encabezado: Marca El Diario Inesperado -->
+      <div class="social-card-header">
+        <div class="social-card-brand">
+          <span class="brand-text">EL DIARIO INESPERADO</span>
+          <span class="brand-sub">CRÓNICA DIGITAL</span>
         </div>
-      }
+      </div>
 
-      <!-- Rectángulo del Titular (Estilo Ticker TV) -->
-      <div class="social-card-title-box">
-        <div class="social-card-ticker-accent"></div>
-        <div class="social-card-title-content">
-          <h1 class="social-card-title">{{ title || 'TITULAR DE LA NOTICIA EN DESARROLLO...' }}</h1>
+      <!-- Pie de tarjeta: Reportero + Titular TV (Anclado a la parte inferior) -->
+      <div class="social-card-footer">
+        @if (authorName) {
+          <div class="social-card-author-badge">
+            <span class="author-label">REPORTERO</span>
+            <span class="author-name">{{ authorName }}</span>
+          </div>
+        }
+
+        <div class="social-card-title-box">
+          <div class="social-card-ticker-accent"></div>
+          <div class="social-card-title-content">
+            <h1 class="social-card-title">{{ title || 'TITULAR DE LA NOTICIA EN DESARROLLO...' }}</h1>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Botones y estados de previsualización final -->
+  <!-- Botones de Acción -->
   <div class="social-card-actions mt-4 flex flex-col sm:flex-row gap-4 items-center justify-between p-4 bg-slate-900 rounded-xl border border-slate-800">
     <div class="text-left">
-      <h4 class="text-sm font-semibold text-white">Generador de Social Card</h4>
-      <p class="text-xs text-slate-400">Genera una gráfica con estilo de transmisión de TV lista para tus redes sociales.</p>
+      <h4 class="text-sm font-semibold text-white">Generador de Social Card (Instagram Portrait 4:5)</h4>
+      <p class="text-xs text-slate-400">Diseño con Safe Area perimetral optimizado para evitar recortes en Instagram.</p>
     </div>
     
     <div class="flex gap-2">
@@ -76,9 +77,9 @@
   @if (previewGeneratedUrl) {
     <div class="mt-4 p-4 bg-emerald-950/20 border border-emerald-800/30 rounded-xl">
       <div class="flex items-center gap-2 mb-2 text-emerald-400">
-        <span class="text-xs font-bold uppercase tracking-wider">✓ Gráfica Generada Exitosamente</span>
+        <span class="text-xs font-bold uppercase tracking-wider">✓ Gráfica Generada Exitosamente (4:5)</span>
       </div>
-      <div class="relative rounded-lg overflow-hidden border border-emerald-800/40">
+      <div class="relative rounded-lg overflow-hidden border border-emerald-800/40 max-w-[360px] mx-auto">
         <img [src]="previewGeneratedUrl" class="w-full h-auto object-contain" alt="Gráfica final capturada">
       </div>
     </div>
