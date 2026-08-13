@@ -113,7 +113,7 @@
   align-items: center;
   justify-content: center;
   background: #e11d48;
-  padding: 5px 14px 7px 14px;
+  padding: 6px 14px;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(225, 29, 72, 0.4);
 }
@@ -137,6 +137,7 @@
   margin: 0;
   padding: 0;
   display: inline-block;
+  transform: translateY(-1.5px);
 }
 
 // Pie de página de la tarjeta (Ticker de TV)
