@@ -5,11 +5,12 @@ import { HttpClient } from '@angular/common/http'; // Para enviar la petición
 import { finalize } from 'rxjs'; // Para asegurar el reseteo del estado de carga
 import { AdminNav } from '../admin-nav/admin-nav';
 import { environment } from '../../environments/environment';
+import { SocialCardEditor } from '../social-card-editor/social-card-editor';
 
 @Component({
   selector: 'app-admin-panel',
   standalone: true,
-  imports: [CommonModule, FormsModule, AdminNav], // Importamos los módulos aquí
+  imports: [CommonModule, FormsModule, AdminNav, SocialCardEditor], // Importamos los módulos aquí
   templateUrl: './admin-panel.html',
 })
 export class AdminPanel implements OnInit {
@@ -49,6 +50,9 @@ export class AdminPanel implements OnInit {
   queryUnsplash: string = '';
   imagenesUnsplash: any[] = [];
   buscandoImagenes: boolean = false;
+
+  // Archivo de gráfica generada
+  graficaGeneradaFile: File | null = null;
 
   // Inyectamos el HttpClient y ChangeDetectorRef
   constructor(private http: HttpClient, private cdr: ChangeDetectorRef) { }
@@ -120,7 +124,15 @@ export class AdminPanel implements OnInit {
   seleccionarImagen(url: string) {
     this.historia.imageUrl = url;
     this.imagenesUnsplash = [];
+    this.graficaGeneradaFile = null;
     this.cdr.detectChanges();
+  }
+
+  onGraphicGenerated(blob: Blob) {
+    this.graficaGeneradaFile = new File([blob], 'social-card.png', { type: 'image/png' });
+    this.imagenSeleccionada = this.graficaGeneradaFile;
+    this.cdr.detectChanges();
+    console.log('Gráfica final recibida y guardada como imagenSeleccionada:', this.graficaGeneradaFile);
   }
 
   // Carga todos los autores desde el backend
@@ -254,6 +266,7 @@ export class AdminPanel implements OnInit {
     };
     this.generarLink();
     this.imagenSeleccionada = null;
+    this.graficaGeneradaFile = null;
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
@@ -293,6 +306,7 @@ export class AdminPanel implements OnInit {
       imageUrl: ''
     };
     this.imagenSeleccionada = null;
+    this.graficaGeneradaFile = null;
 
     // Limpiamos el valor del input file en el DOM
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;

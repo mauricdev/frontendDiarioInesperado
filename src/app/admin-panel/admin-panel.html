@@ -161,12 +161,29 @@
                     }
                     
                     @if (historia.imageUrl) {
-                        <div class="mt-4 relative rounded-xl overflow-hidden border border-slate-200 shadow-sm max-h-60 flex justify-center bg-slate-100">
-                            <img [src]="historia.imageUrl" class="object-cover max-h-60 w-full" alt="Vista previa de portada">
-                            <div class="absolute bottom-0 left-0 right-0 bg-slate-900/60 backdrop-blur-xs px-4 py-2 text-white text-xs flex justify-between items-center">
-                                <span>Vista previa de la portada seleccionada</span>
-                                <button type="button" (click)="historia.imageUrl = ''" class="bg-rose-600 hover:bg-rose-700 px-2 py-1 rounded text-[10px] font-bold transition-colors cursor-pointer">Eliminar</button>
+                        <div class="mt-6 p-4 border border-slate-200 rounded-xl bg-slate-50">
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Editor Gráfico (Social Card)</span>
+                                <button type="button" (click)="historia.imageUrl = ''; graficaGeneradaFile = null; imagenSeleccionada = null;" class="text-xs text-rose-600 hover:text-rose-800 font-semibold cursor-pointer">Eliminar imagen de Unsplash</button>
                             </div>
+                            
+                            <!-- Editor dinámico de la Social Card -->
+                            <app-social-card-editor
+                                [imageUrl]="historia.imageUrl"
+                                [title]="historia.title"
+                                [authorName]="historia.author"
+                                (graphicGenerated)="onGraphicGenerated($event)">
+                            </app-social-card-editor>
+
+                            @if (graficaGeneradaFile) {
+                                <div class="mt-4 p-3 bg-emerald-50 rounded-lg border border-emerald-200 flex items-center justify-between text-emerald-800">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-base">📸</span>
+                                        <span class="text-xs font-medium">Gráfica lista para subir: <strong>social-card.png</strong></span>
+                                    </div>
+                                    <span class="text-[10px] bg-emerald-600 text-white px-2 py-0.5 rounded-full font-bold">PREPARADA</span>
+                                </div>
+                            }
                         </div>
                     }
                 </div>
